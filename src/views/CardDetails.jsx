@@ -10,7 +10,7 @@ import './CardDetails.css';
 function CardDetails() {
   const { cardDetails } = useContext(CardDetailsContext);
   const href = `https://${cardDetails.web}`;
-
+  console.log(cardDetails);
   return (
     <div className='card-details'>
       <div className='card-details-container'>
@@ -49,15 +49,14 @@ function CardDetails() {
               <br />
               <br /> Suscipit aliquid rerum mollitia laborum provident corporis
               voluptatum quia ratione molestias quibusdam tempore, possimus
-              inventore error veritatis neque, quas nisi. Qui, et. aliquid rerum
-              mollitia laborum provident corporis voluptatum quia ratione
-              molestias quibusdam tempore, possimus inventore error veritatis
-              neque. Suscipit aliquid rerum mollitia laborum provident corporis
+              inventore error veritatis neque Qui, et. aliquid rerum mollitia
+              laborum provident corporis voluptatum quia ratione molestias
+              quibusdam tempore, possimus inventore error veritatis neque.
+              Suscipit aliquid rerum mollitia laborum provident corporis
               voluptatum quia ratione molestias quibusdam tempore, possimus
-              inventore error veritatis neque, quas nisi. Qui, et. aliquid rerum
-              mollitia laborum provident corporis voluptatum quia ratione
-              molestias quibusdam tempore, possimus inventore error veritatis
-              neque.
+              inventore error veritatis neque, quas nisi. Aliquid rerum mollitia
+              laborum provident corporis voluptatum quia ratione molestias
+              quibusdam tempore, possimus inventore error veritatis neque.
             </p>
           </div>
         </Card>

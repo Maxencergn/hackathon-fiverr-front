@@ -8,7 +8,32 @@
 /* .leaflet-popup-content-wrapper {
   position: fixed;
 } */
-
+.map-box {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.container-event {
+  width: 50%;
+  /* border-radius: 50%; */
+  margin: 2%;
+  width: 400px;
+  box-shadow: 1px 1px 12px #555;
+}
+.container-event-big {
+  width: 100%;
+  /* border-radius: 50%; */
+  margin: 2%;
+  width: 400px;
+  box-shadow: 1px 1px 12px #555;
+}
+.map-box-big {
+  display: flex;
+  width: 100%;
+  justify-content: flex-en;
+  align-items: flex-end;
+}
 form {
   display: flex;
   flex-direction: column;
@@ -19,27 +44,6 @@ form {
   flex-wrap: wrap;
   flex-direction: column;
   margin: 4%;
-}
-
-.map-box {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-}
-
-/* .map-box img {
-  width: 398px;
-  height: 514px;
-  border-radius: 5px;
-} */
-
-.container-event {
-  width: 50%;
-  /* border-radius: 50%; */
-  margin: 2%;
-  width: 400px;
-  box-shadow: 1px 1px 12px #555;
 }
 
 .titre-label {

@@ -6,7 +6,6 @@ import { useHistory } from 'react-router';
 import CardDetailsContext from '../contexts/CardDetailsContext';
 
 function CardComponent(props) {
-  console.log(props);
   const { nom, web, cp, ville, img } = props;
   const { setCardDetails } = useContext(CardDetailsContext);
 

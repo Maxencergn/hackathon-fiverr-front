@@ -7,11 +7,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card } from 'react-bootstrap';
 import { Form } from 'react-bootstrap';
 import { FormControl } from 'react-bootstrap';
-import dataCoworking from '../dataCoworking.json';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 
 function Event({ locId }) {
   const [users, setUsers] = useState([]);
   const [location, setLocation] = useState(null);
+  const [locationId, setLocationId] = useState(null);
   const [formContent, setFormContent] = useState({
     user_id: 0,
     description: '',
@@ -19,22 +20,24 @@ function Event({ locId }) {
     date: '',
     time: '',
   });
-
-  // const cardId = cardDetails.id;
-  // console.log(cardDetails);
-  // const getData = async () => {
-  //   const response = await fetch(dataCoworking);
-  //   console.log('tacos ' + JSON.stringify(response));
-  //   setIsLoaded(response.ok);
-  // };
-  // console.log(isLoaded);
-
+  const getLocation = async () => {
+    try {
+      await axios
+        .get('https://dataxcowork.herokuapp.com/cowork')
+        .then((response) => {
+          setLocation(response.data);
+          setLocationId(response.data.find((item) => item.id === locId));
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
+    getLocation();
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/user`).then((response) => {
       setUsers(response.data);
     });
-    setLocation(dataCoworking.find((data) => data.id === locId));
-  }, [locId]);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -50,33 +53,17 @@ function Event({ locId }) {
       description: event.target.value,
     });
   };
-  const handleChangeSelect = (event) => {
-    setFormContent({
-      user_id: event.target.value,
-    });
-  };
-
   return (
     <div className='container-card-event'>
       <Card className='container-event'>
         <form onSubmit={handleSubmit}>
           <div className='inputContent'>
             <Form.Label className='titre-label'>Work with.</Form.Label>
-            <select
-              className='label'
-              name='user_id'
-              id='user_id'
-              onSelect={handleChangeSelect}
-            >
+            <select className='label' name='user_id' id='user_id'>
               <option value=''>Choose your partner</option>
               {users.map((user) => {
                 return (
-                  <option
-                    key={user.id}
-                    name='user_id'
-                    value={user.id}
-                    onSelect={handleChangeSelect}
-                  >
+                  <option key={user.id} name='user_id' value={user.id}>
                     {user.firstname} {user.lastname}
                   </option>
                 );
@@ -97,7 +84,6 @@ function Event({ locId }) {
               label='description'
               name='description'
               type='text'
-              // value='description'
               onChange={handleChangeDescritpion}
               as='textarea'
               rows={6}
@@ -108,13 +94,15 @@ function Event({ locId }) {
           </div>
         </form>
       </Card>
-      {location ? (
+      {!locationId ? (
+        <p>loading . . . </p>
+      ) : (
         <Card className='container-event'>
           <form>
             <div className='map-box'>
               <MapContainer
                 Marker
-                center={[location.latitude, location.longitude]}
+                center={[locationId.latitude, locationId.longitude]}
                 zoom={13}
                 scrollWheelZoom={true}
               >
@@ -122,9 +110,9 @@ function Event({ locId }) {
                   attribution=''
                   url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 />
-                <Marker position={[location.latitude, location.longitude]}>
-                  <Popup>
-                    <h3>{location.NOM}</h3>
+                <Marker position={[locationId.latitude, locationId.longitude]}>
+                  <Popup keepInView closeButton={false}>
+                    <h3>{locationId.NOM}</h3>
                     <br />
                     <FormInput
                       label='date '
@@ -144,10 +132,57 @@ function Event({ locId }) {
                 </Marker>
               </MapContainer>
             </div>
+            {/* <Card className='container-event-big'>
+              <div className='map-box-big'>
+                <MapContainer
+                  Marker
+                  center={[47.21815676426419, -1.552947858186399]}
+                  zoom={6}
+                  scrollWheelZoom={true}
+                >
+                  <TileLayer
+                    attribution=''
+                    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                  />
+                  <MarkerClusterGroup>
+                    {locationBig[0].latitude && locationBig[0].longitude ? (
+                      locationBig.map((place) => {
+                        return (
+                          // console.log([place.latitude, place.longitude]),
+                          <Marker
+                            position={[place.latitude, place.longitude]}
+                            key={place.id}
+                          >
+                            <Popup>
+                              <h3>{place.NOM}</h3>
+                              <br />
+                              <FormInput
+                                label='date '
+                                name='date'
+                                type='date'
+                                value={formContent}
+                                setValue={setFormContent}
+                              />
+                              <FormInput
+                                label='time '
+                                name='time'
+                                type='time'
+                                value={formContent}
+                                setValue={setFormContent}
+                              />
+                            </Popup>
+                          </Marker>
+                        );
+                      })
+                    ) : (
+                      <p>loading</p>
+                    )}
+                  </MarkerClusterGroup>
+                </MapContainer>
+              </div>
+            </Card> */}
           </form>
         </Card>
-      ) : (
-        <p>loading</p>
       )}
     </div>
   );
